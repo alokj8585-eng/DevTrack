@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="DevTrack - a simple developer productivity tracker">
+  <title>DevTrack — Developer Productivity</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#" aria-label="DevTrack home"><span class="brand-mark">D</span><span>devtrack</span></a>
+      <p class="nav-label">WORKSPACE</p>
+      <nav>
+        <button class="nav-link active" data-page="overview"><span>◫</span> Overview</button>
+        <button class="nav-link" data-page="tasks"><span>☷</span> Tasks</button>
+        <button class="nav-link" data-page="sessions"><span>◷</span> Coding sessions</button>
+        <button class="nav-link" data-page="journal"><span>▤</span> Learning journal</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="local-note"><span class="status-dot"></span><span>Data saved on this device</span></div>
+        <p class="tiny">DevTrack · Starter edition</p>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div><p class="eyebrow" id="today-label"></p><h1 id="page-title">Overview</h1></div>
+        <div class="top-actions"><span class="avatar">D</span><span class="user-label">My workspace</span></div>
+      </header>
+
+      <section class="page active" id="page-overview">
+        <div class="welcome-row">
+          <div><h2>Make progress, one day at a time.</h2><p class="muted">A clear view of what you're building and learning.</p></div>
+          <button class="button primary" data-go="tasks">＋ Add a task</button>
+        </div>
+        <div class="stats-grid">
+          <article class="stat-card"><p class="stat-label">Coding time today</p><strong id="stat-today">0m</strong><p class="stat-foot">Time tracked in sessions</p></article>
+          <article class="stat-card"><p class="stat-label">Tasks completed</p><strong id="stat-completed">0</strong><p class="stat-foot">Across your workspace</p></article>
+          <article class="stat-card"><p class="stat-label">Open tasks</p><strong id="stat-open">0</strong><p class="stat-foot">Still on your list</p></article>
+          <article class="stat-card"><p class="stat-label">Journal entries</p><strong id="stat-journal">0</strong><p class="stat-foot">Things you've learned</p></article>
+        </div>
+        <div class="content-grid">
+          <article class="panel">
+            <div class="panel-heading"><div><h3>Weekly coding activity</h3><p class="muted small">Hours tracked over the last 7 days</p></div><span class="tag">THIS WEEK</span></div>
+            <div class="chart" id="weekly-chart" aria-label="Weekly coding activity chart"></div>
+          </article>
+          <article class="panel">
+            <div class="panel-heading"><div><h3>Daily goal</h3><p class="muted small">Your target is 2 hours</p></div></div>
+            <div class="goal-wrap"><div class="goal-ring" id="goal-ring"><div><strong id="goal-percent">0%</strong><span>completed</span></div></div></div>
+            <p class="goal-caption" id="goal-caption">120 minutes remaining today</p>
+          </article>
+        </div>
+        <article class="panel">
+          <div class="panel-heading"><div><h3>Next up</h3><p class="muted small">Your most recently added open tasks</p></div><button class="text-button" data-go="tasks">View all →</button></div>
+          <div id="overview-tasks" class="task-preview"></div>
+        </article>
+      </section>
+
+      <section class="page" id="page-tasks">
+        <div class="page-intro"><div><h2>Tasks</h2><p class="muted">Break your development work into manageable steps.</p></div></div>
+        <form id="task-form" class="panel form-panel">
+          <div class="form-title"><h3 id="task-form-title">Add a task</h3><span class="muted small">Fields marked * are required</span></div>
+          <input type="hidden" id="task-id">
+          <div class="form-grid">
+            <label class="field wide">Task title *<input id="task-title" maxlength="90" placeholder="e.g. Finish Python practice" required></label>
+            <label class="field">Category<select id="task-category"><option>Learning</option><option>Project</option><option>Open source</option><option>Other</option></select></label>
+            <label class="field">Priority<select id="task-priority"><option>Medium</option><option>High</option><option>Low</option></select></label>
+            <label class="field">Due date<input id="task-due" type="date"></label>
+            <label class="field">Status<select id="task-status"><option>To do</option><option>In progress</option><option>Completed</option></select></label>
+          </div>
+          <div class="form-actions"><button class="button primary" type="submit" id="task-submit">Save task</button><button class="button secondary hidden" type="button" id="task-cancel">Cancel edit</button></div>
+        </form>
+        <div class="list-toolbar"><div><h3>Your tasks</h3><p class="muted small" id="task-count">0 tasks</p></div><select id="task-filter" class="compact-select" aria-label="Filter tasks"><option value="All">All tasks</option><option>To do</option><option>In progress</option><option>Completed</option><option>Overdue</option></select></div>
+        <div id="task-list" class="task-list"></div>
+      </section>
+
+      <section class="page" id="page-sessions">
+        <div class="page-intro"><div><h2>Coding sessions</h2><p class="muted">Track focused time and build a consistent habit.</p></div></div>
+        <div class="session-layout">
+          <article class="panel timer-panel">
+            <span class="tag">FOCUS TIMER</span>
+            <div class="timer" id="timer-display">00:00:00</div>
+            <p class="muted" id="timer-status">Ready when you are.</p>
+            <label class="field">What are you working on?<input id="session-project" maxlength="80" placeholder="e.g. DevTrack project"></label>
+            <label class="field">Language<select id="session-language"><option>Python</option><option>JavaScript</option><option>TypeScript</option><option>Java</option><option>C++</option><option>Other</option></select></label>
+            <div class="timer-actions"><button class="button primary" id="timer-start">Start session</button><button class="button secondary hidden" id="timer-pause">Pause</button><button class="button secondary hidden" id="timer-resume">Resume</button><button class="button danger hidden" id="timer-stop">Finish session</button></div>
+            <p class="tiny muted">The timer uses timestamps and is restored if you refresh this page.</p>
+          </article>
+          <article class="panel"><div class="panel-heading"><div><h3>Session history</h3><p class="muted small">Your completed focus sessions</p></div></div><div id="session-list"></div></article>
+        </div>
+      </section>
+
+      <section class="page" id="page-journal">
+        <div class="page-intro"><div><h2>Learning journal</h2><p class="muted">Keep a record of what you discover along the way.</p></div></div>
+        <form id="journal-form" class="panel form-panel">
+          <div class="form-title"><h3 id="journal-form-title">New entry</h3></div>
+          <input type="hidden" id="journal-id">
+          <label class="field">Title *<input id="journal-title" maxlength="90" placeholder="What did you learn today?" required></label>
+          <label class="field">Your notes *<textarea id="journal-content" rows="4" maxlength="3000" placeholder="Write about a concept, problem, or solution..." required></textarea></label>
+          <div class="form-actions"><button class="button primary" type="submit">Save entry</button><button class="button secondary hidden" type="button" id="journal-cancel">Cancel edit</button></div>
+        </form>
+        <div class="list-toolbar"><div><h3>Previous entries</h3><p class="muted small">Your personal learning history</p></div><input id="journal-search" class="search-input" placeholder="Search entries..." aria-label="Search journal"></div>
+        <div id="journal-list" class="journal-list"></div>
+      </section>
+
+      <footer class="footer">DevTrack <span>·</span> Small steps. Real progress.</footer>
+    </main>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
