@@ -67,3 +67,9 @@ DevTrack/
 ## License
 
 Choose a license before publishing this project publicly (for example, MIT).
+
+## Project Status
+
+First version of DevTrack — a beginner-friendly developer productivity tracker.
+
+Deployment: GitHub Pages configuration in progress.
